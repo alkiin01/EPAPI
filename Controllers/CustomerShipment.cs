@@ -581,7 +581,7 @@ namespace EPAPI.Controllers
                 newSetShipDtl.WarehouseCodeDescription = param.WarehouseCodeDescription;
                 newSetShipDtl.BinNum = param.BinNum;
 
-                newSetShipDtl.LotNum = param.LotNum;
+                newSetShipDtl.LotNum = "A";
                 newSetShipDtl.RowMod = "A";
                 var newShipment = new
                 {
@@ -625,7 +625,7 @@ namespace EPAPI.Controllers
                 newSetShipDtl.WarehouseCodeDescription = param.WarehouseCodeDescription;
                 newSetShipDtl.BinNum = param.BinNum;
 
-                newSetShipDtl.LotNum = param.LotNum;
+                newSetShipDtl.LotNum = "A";
                 newSetShipDtl.RowMod = "A";
 
                 var newShip = new
@@ -760,7 +760,7 @@ namespace EPAPI.Controllers
             newSetShipDtl.WarehouseCodeDescription = param.WarehouseCodeDescription;
             newSetShipDtl.BinNum = param.BinNum;
 
-            newSetShipDtl.LotNum = param.LotNum;
+            newSetShipDtl.LotNum = "A";
             newSetShipDtl.RowMod = "U";
             var newShipment = new
             {
@@ -804,7 +804,7 @@ namespace EPAPI.Controllers
             newSetShipDtl.WarehouseCodeDescription = param.WarehouseCodeDescription;
             newSetShipDtl.BinNum = param.BinNum;
 
-            newSetShipDtl.LotNum = param.LotNum;
+            newSetShipDtl.LotNum = "A";
             newSetShipDtl.RowMod = "U";
 
             var newShip = new

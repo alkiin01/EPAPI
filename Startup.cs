@@ -10,7 +10,7 @@ namespace EPAPI
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v2", new OpenApiInfo { Title = "SAI API", Version = "v2" });
+                c.SwaggerDoc("v2", new OpenApiInfo { Title = "SAI API", Version = "v1" });
             });
             services.AddCors(options =>
              options.AddPolicy("AllowAllOrigins",
@@ -34,7 +34,7 @@ namespace EPAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v2/swagger.json", "SAI API V2");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V2");
                 });
             }
             app.UseHttpsRedirection();

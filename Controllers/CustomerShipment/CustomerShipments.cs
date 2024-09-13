@@ -18,17 +18,19 @@ namespace EPAPI.Controllers
     {
 
         public EpicRest epicRest = new EpicRest();
+        User user = new User();
         ShipmentRepositories shipmentRepository = new ShipmentRepositories();
         OrderInfo orderInfo = new OrderInfo();
-        User user = new User();
 
 
         [Route("Shipment/GetNew")]
         [HttpPost]
-        public dynamic GetNew([FromBody] UserEpicor user)
+        public dynamic GetNew([FromBody] UserEpicor users)
         {
-            EpicRest.EpiUser = user.nik;
-            bool test = epicRest.CreateBearer();
+          user.nik = users.nik;
+            user.password = users.password;
+
+            bool test = epicRest.PortalBeearer(user);
             List<ShipHead> list = new List<ShipHead>();
             string rtn = "";
             if (test)
@@ -192,7 +194,7 @@ namespace EPAPI.Controllers
         {
             var pack = param.FirstOrDefault();
             var packNum = pack.packNum;
-            bool test = epicRest.CreateBearer();
+         bool test = epicRest.PortalBeearer(user);
             MultiMap<string, string> dic = new MultiMap<string, string>();
             dic.Add("packNum", packNum); //Value harus string
             List<ShipHead> list = new List<ShipHead>();
@@ -262,10 +264,10 @@ namespace EPAPI.Controllers
         [HttpPost]
         public dynamic SetOrderNum([FromBody] OrderNumInfo param)
         {
-            EpicRest.EpiUser = param.nik;
-            EpicRest.EpiPass = param.password;
+            user.nik = param.nik;
+            user.password = param.password;
 
-            bool test = epicRest.CreateBearer();
+         bool test = epicRest.PortalBeearer(user);
             List<ShipHead> list = new List<ShipHead>();
             string rtn = "";
             if (test)
@@ -440,10 +442,10 @@ namespace EPAPI.Controllers
         [HttpPost]
         public dynamic UpdateDetail([FromBody] OrderNumInfo param)
         {
-            EpicRest.EpiUser = param.nik;
-            EpicRest.EpiPass = param.password;
+            user.nik = param.nik;
+            user.password = param.password;
 
-            bool test = epicRest.CreateBearer();
+         bool test = epicRest.PortalBeearer(user);
             List<ShipHead> listHead = new List<ShipHead>();
             ShipDtl listDtls = new ShipDtl();
             List<ShipDtl> listDtl = new List<ShipDtl>();
@@ -726,13 +728,13 @@ namespace EPAPI.Controllers
         [HttpPost]
         public dynamic UpdateChangeDetail([FromBody] OrderNumLine param)
         {
-            EpicRest.EpiUser = param.nik;
-            EpicRest.EpiPass = param.password;
+            user.nik = param.nik;
+            user.password = param.password;
             try
             {
 
             
-            bool test = epicRest.CreateBearer();
+         bool test = epicRest.PortalBeearer(user);
 
             List<ShipHead> listHead = new List<ShipHead>();
             List<ShipHead> listHead2 = new List<ShipHead>();
@@ -1005,9 +1007,9 @@ namespace EPAPI.Controllers
         public dynamic DeleteHead([FromBody] PackNumLine param)
         {
             string rtn = "";
-            EpicRest.EpiUser = param.nik;
-            EpicRest.EpiPass = param.password;
-            bool test = epicRest.CreateBearer();
+            user.nik = param.nik;
+            user.password = param.password;
+            bool test = epicRest.PortalBeearer(user);
             if (test)
             {
                 dynamic result;
@@ -1057,11 +1059,11 @@ namespace EPAPI.Controllers
         [HttpDelete]
         public dynamic DeleteLine([FromBody] PackNumLine param)
         {
-            EpicRest.EpiUser = param.nik;
-            EpicRest.EpiPass = param.password;
+            user.nik = param.nik;
+            user.password = param.password;
 
             string rtn = "";
-            bool test = epicRest.CreateBearer();
+            bool test = epicRest.PortalBeearer(user);
             if (test)
             {
                 try
@@ -1113,10 +1115,10 @@ namespace EPAPI.Controllers
         [HttpPost]
         public dynamic ReadyToPrint([FromBody] ReadyPrint param)
         {
-            EpicRest.EpiUser = param.nik;
-            EpicRest.EpiPass = param.password;
+            user.nik = param.nik;
+            user.password = param.password;
             string rtn = "";
-            bool test = epicRest.CreateBearer();
+         bool test = epicRest.PortalBeearer(user);
             if (test)
             {
                 try
@@ -1174,7 +1176,7 @@ namespace EPAPI.Controllers
         [HttpPost]
         public dynamic SetUpdateMaster([FromBody] List<SetUpdateMaster> update)
         {
-            bool test = epicRest.CreateBearer();
+         bool test = epicRest.PortalBeearer(user);
             if (test)
             {
                 dynamic result;
@@ -1253,7 +1255,7 @@ namespace EPAPI.Controllers
 
             try
             {
-                bool test = epicRest.CreateBearer();
+             bool test = epicRest.PortalBeearer(user);
                 string rtn = "";
                 if (test)
                 {

@@ -6,6 +6,7 @@ using Microsoft.Build.Evaluation;
 using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 
 namespace EPAPI.Controllers.TimeEntry
 {
@@ -51,8 +52,9 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
                         };
+
                         return result;
                     }
                     else
@@ -69,7 +71,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -81,7 +83,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + "GetLaborHead"
+                   status = ex.Message.ToString() + "GetLaborHead"
                 };
                 return result;
             }
@@ -119,8 +121,9 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
                         };
+
                         return result;
                     }
                     else
@@ -133,10 +136,10 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 200,
-                        desc = "Ok",
+                       status = "Ok",
                         data = new
                         {
-                            LaborHedSeq = SqNum.LaborHedSeq
+                                LaborHedSeq = SqNum.LaborHedSeq
                         }
                     };
                     return result;
@@ -147,7 +150,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
 
@@ -179,9 +182,10 @@ namespace EPAPI.Controllers.TimeEntry
                     {
                         result = new
                         {
-                            code = 9999,
-                            desc = boGet.ResponseError.ToString()
+                            code = 400,
+                           status = boGet.ResponseError.ToString(),
                         };
+
                         return result;
                     }
                     else
@@ -199,7 +203,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -211,7 +215,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + "GetLaborHead"
+                   status = ex.Message.ToString() + "GetLaborHead"
                 };
                 return result;
             }
@@ -255,8 +259,10 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
+                        
                         };
+
                         return result;
                     }
                     else
@@ -274,7 +280,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -286,7 +292,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + "ChangeShift"
+                   status = ex.Message.ToString() + "ChangeShift"
                 };
                 return result;
             }
@@ -317,8 +323,9 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
                         };
+
                         return result;
                     }
                     else
@@ -336,7 +343,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -348,7 +355,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + "DirectUpdate"
+                   status = ex.Message.ToString() + "DirectUpdate"
                 };
                 return result;
             }
@@ -397,8 +404,9 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
                         };
+
                         return result;
                     }
                     else
@@ -411,10 +419,10 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 200,
-                        desc = "Ok",
+                       status = "Ok",
                         data = new
-                        {
-                        LaborHedSeq = SqNum.LaborHedSeq
+                        { 
+                                LaborHedSeq = SqNum.LaborHedSeq
                         }
                     };
                     return result;
@@ -425,7 +433,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
 
@@ -474,8 +482,10 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
+                        
                         };
+
                         return result;
                     }
                     else
@@ -504,7 +514,8 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 200,
-                        desc = "Ok"
+                       status = "Ok",
+                        data = Array.Empty<object>()
                     };
                     return result;
                 }
@@ -513,7 +524,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -525,7 +536,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + " GeNewtLaborDtl"
+                   status = ex.Message.ToString() + " GeNewtLaborDtl"
                 };
                 return result;
             }
@@ -558,8 +569,9 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
                         };
+
                         return result;
                     }
                     else
@@ -581,7 +593,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + "DefaultJobNum"
+                   status = ex.Message.ToString() + "DefaultJobNum"
                 };
                 return result;
             }
@@ -614,8 +626,10 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
+                        
                         };
+
                         return result;
                     }
                     else
@@ -637,7 +651,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + "LaborDtlOprSeq"
+                   status = ex.Message.ToString() + "LaborDtlOprSeq"
                 };
                 return result;
             }
@@ -669,8 +683,10 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
+                        
                         };
+
                         return result;
                     }
                     else
@@ -692,7 +708,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + "LaborDtlOprSeq"
+                   status = ex.Message.ToString() + "LaborDtlOprSeq"
                 };
                 return result;
             }
@@ -725,8 +741,10 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
+                        
                         };
+
                         return result;
                     }
                     else
@@ -744,7 +762,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -756,7 +774,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + " DirectUpdate"
+                   status = ex.Message.ToString() + " DirectUpdate"
                 };
                 return result;
             }
@@ -789,8 +807,10 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
+                        
                         };
+
                         return result;
                     }
                     else
@@ -810,7 +830,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + " DefaultLaborType"
+                   status = ex.Message.ToString() + " DefaultLaborType"
                 };
                 return result;
             }
@@ -842,8 +862,10 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
+                        
                         };
+
                         return result;
                     }
                     else
@@ -864,7 +886,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + " DefaultLaborType"
+                   status = ex.Message.ToString() + " DefaultLaborType"
                 };
                 return result;
             }
@@ -900,8 +922,10 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
+                        
                         };
+
                         return result;
                     }
                     else
@@ -919,7 +943,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -931,7 +955,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + "DirectUpdate"
+                   status = ex.Message.ToString() + "DirectUpdate"
                 };
                 return result;
             }
@@ -965,8 +989,10 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
+                        
                         };
+
                         return result;
                     }
                     else
@@ -987,7 +1013,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + "DefaultJobNum"
+                   status = ex.Message.ToString() + "DefaultJobNum"
                 };
                 return result;
             }
@@ -1014,9 +1040,11 @@ namespace EPAPI.Controllers.TimeEntry
                     {
                         result = new
                         {
-                            code = 9999,
-                            desc = boGet.ResponseError.ToString()
+                            code = 400,
+                           status = boGet.ResponseError.ToString(),
+                        
                         };
+
                         return result;
                     }
                     else
@@ -1029,11 +1057,16 @@ namespace EPAPI.Controllers.TimeEntry
                         string dtl = jsonDtl == null ? "" : jsonDtl.ToString();
                         listHead = JsonConvert.DeserializeObject<List<LaborHed>>(rtn);
                         listData = JsonConvert.DeserializeObject<List<LaborDtl>>(dtl);
-                        result = new
-                        {
-                            LaborHead = listHead,
-                            LaborDtl = listData
-                        };
+                        result = new{ 
+                            code = 200,
+                            status = "OK",
+                            data = new
+                            {
+                              
+                                LaborHead = new [] {listHead },
+                                LaborDtl = new [] { listData }
+                            }
+                         };
                     }
                 }
                 else
@@ -1041,7 +1074,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -1054,7 +1087,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + "GetLaborDtl"
+                   status = ex.Message.ToString() + "GetLaborDtl"
                 };
                 return result;
             }
@@ -1078,9 +1111,11 @@ namespace EPAPI.Controllers.TimeEntry
                     {
                         result = new
                         {
-                            code = 9999,
-                            desc = boGet.ResponseError.ToString()
+                            code = 400,
+                           status = boGet.ResponseError.ToString(),
+                        
                         };
+
                         return result;
                     }
                     else
@@ -1103,7 +1138,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -1115,7 +1150,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + "GetLaborDtl"
+                   status = ex.Message.ToString() + "GetLaborDtl"
                 };
                 return result;
             }
@@ -1166,8 +1201,10 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
+                        
                         };
+
                         return result;
                     }
                     else
@@ -1175,8 +1212,15 @@ namespace EPAPI.Controllers.TimeEntry
                         preview = bo.ResponseBody.ToString();
                         LaborResponse newResponse = JsonConvert.DeserializeObject<LaborResponse>(preview);
                         listData = newResponse.parameters.ds.LaborDtl.ToList();
-
-                        return listData;
+                        result = new
+                        {
+                            code = 200,
+                           status = "OK",
+                            data = new {
+                                listData
+                            }
+                        };
+                        return result;
                     }
 
                 }
@@ -1185,7 +1229,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -1197,7 +1241,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + " UpdateDtl"
+                   status = ex.Message.ToString() + " UpdateDtl"
                 };
                 return result;
             }
@@ -1251,8 +1295,10 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
+                        
                         };
+
                         return result;
                     }
                     else
@@ -1284,8 +1330,10 @@ namespace EPAPI.Controllers.TimeEntry
                             result = new
                             {
                                 code = 400,
-                                desc = bo.ResponseError.ToString()
+                               status = bo.ResponseError.ToString(),
+                            
                             };
+
                             return result;
                         }
                         else
@@ -1294,8 +1342,12 @@ namespace EPAPI.Controllers.TimeEntry
                              newResponse = JsonConvert.DeserializeObject<LaborResponse>(preview);
                             listData = newResponse.parameters.ds.LaborDtl.ToList();
                             listData = ValidateChargeRateForTimeType(listData);
-
-                            return listData;
+                            result = new{ 
+                             code = 200,
+                             status = "OK",
+                             
+                            };
+                            return result;
                         }
                     }
 
@@ -1305,7 +1357,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -1317,7 +1369,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + " SubmitForApproval"
+                   status = ex.Message.ToString() + " SubmitForApproval"
                 };
                 return result;
             }
@@ -1370,8 +1422,10 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
+                        
                         };
+
                         return result;
                     }
                     else
@@ -1399,8 +1453,10 @@ namespace EPAPI.Controllers.TimeEntry
                             result = new
                             {
                                 code = 400,
-                                desc = bo.ResponseError.ToString()
+                                status = bo.ResponseError.ToString(),
+                                data = new { }
                             };
+
                             return result;
                         }
                         else
@@ -1412,7 +1468,7 @@ namespace EPAPI.Controllers.TimeEntry
                             result = new
                             {
                                 code = 200,
-                                desc = "Ok"
+                               status = "Ok"
                             };
                             return result;
                         }
@@ -1424,7 +1480,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -1436,7 +1492,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + " SubmitForApproval"
+                   status = ex.Message.ToString() + " SubmitForApproval"
                 };
                 return result;
             }
@@ -1476,9 +1532,11 @@ namespace EPAPI.Controllers.TimeEntry
                     {
                         result = new
                         {
-                            code = 9999,
-                            desc = boGet.ResponseError.ToString()
+                            code = 400,
+                           status = boGet.ResponseError.ToString(),
+                        
                         };
+
                         return result;
                     }
                     else
@@ -1493,7 +1551,16 @@ namespace EPAPI.Controllers.TimeEntry
                         //JArray jsonArray = (JArray)jsonObject["LaborDtl"];
                         data = JsonConvert.DeserializeObject<LaborDtl>(rtn);
                         listData = new List<LaborDtl> { data };
-                        return listData;
+                        result = new
+                        {
+                            code = 200,
+                           status = "Ok",
+                            data = new
+                            {
+                                listData
+                            }
+                        };
+                        return result;
                     }
                 }
                 else
@@ -1501,7 +1568,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -1513,7 +1580,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + "GetLaborDtl"
+                   status = ex.Message.ToString() + "GetLaborDtl"
                 };
                 return result;
             }
@@ -1544,7 +1611,8 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
+                          data = new { }
                         };
                         return result;
                     }
@@ -1563,7 +1631,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -1575,7 +1643,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + " ValidateChargeRateForTimeType"
+                   status = ex.Message.ToString() + " ValidateChargeRateForTimeType"
                 };
                 return result;
             }
@@ -1604,8 +1672,10 @@ namespace EPAPI.Controllers.TimeEntry
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                           status = bo.ResponseError.ToString(),
+                        
                         };
+
                         return result;
                     }
                     else
@@ -1623,7 +1693,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                       status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -1635,7 +1705,7 @@ namespace EPAPI.Controllers.TimeEntry
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + " ValidateChargeRateForTimeType"
+                   status = ex.Message.ToString() + " ValidateChargeRateForTimeType"
                 };
                 return result;
             }
