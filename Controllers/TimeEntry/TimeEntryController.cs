@@ -134,7 +134,10 @@ namespace EPAPI.Controllers.TimeEntry
                     {
                         code = 200,
                         desc = "Ok",
-                        LaborSeqNum = SqNum.LaborHedSeq
+                        data = new
+                        {
+                            LaborHedSeq = SqNum.LaborHedSeq
+                        }
                     };
                     return result;
 
@@ -409,7 +412,10 @@ namespace EPAPI.Controllers.TimeEntry
                     {
                         code = 200,
                         desc = "Ok",
-                        LaborSeqNum = SqNum.LaborHedSeq
+                        data = new
+                        {
+                        LaborHedSeq = SqNum.LaborHedSeq
+                        }
                     };
                     return result;
 
