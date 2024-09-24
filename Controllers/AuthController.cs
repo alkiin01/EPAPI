@@ -87,7 +87,6 @@ namespace EPAPI.Controllers
         }
 
         [Route("SendEmail")]
-
         public dynamic SendEmail([FromBody] Mail mail)
         {
             try

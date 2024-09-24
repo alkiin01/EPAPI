@@ -220,7 +220,6 @@ namespace EPAPI.Controllers.TimeEntry
                 return result;
             }
         }
-
         [Route("Labor/ChangeShift")]
         [HttpPost]
         public dynamic ChangeShift([FromBody] LaborHedDs entries)
@@ -287,7 +286,6 @@ namespace EPAPI.Controllers.TimeEntry
             }
             catch (Exception ex)
             {
-
                 dynamic result;
                 result = new
                 {
