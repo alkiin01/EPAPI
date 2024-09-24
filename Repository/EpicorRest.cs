@@ -7,14 +7,16 @@ namespace EPAPI.Repository
     {
         public IConfiguration? Configuration { get; }
 
-        public static string AppPoolHost = "epicor.epicor.com";
-        public static string key = "your x-api key"; 
+        public static string AppPoolHost = "epicor.summitadyawinsa.co.id";
+        //public static string key = "K9Ku0h6qpTqPtULQ0cu9j9cdzrLODBZcmrTBmFxkTT2o2"; //PILOT
+        //public static string key = "BO3k5AR3vGXvav1aDRLz6I3CudXSAhaym5HebH2z9LlxN"; //UAT
+        public static string key = "CGgBRV0fZcIGTMP1vtnicaeWeguYNiU7FjvmejOWyR7nu"; //LIVE dev
+        //public static string key = "hbaXzBKAudmdN4jH2BbOje64YCsCMnpYcUysQsYbPe161"; //LIVE app
 
         public static string AppPoolInstance = "dev";
-        public static string EpiUser = "yourUserName";
-        public static string EpiPass = "yourPassword";
-        public static string Company = "yourCompany";
-
+        public static string EpiUser = "270723-001";
+        public static string EpiPass = "alkiin01";
+        public static string Company = "SAI";
 
         public bool CreateBearer()
         {

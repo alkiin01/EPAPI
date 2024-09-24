@@ -13,7 +13,7 @@ namespace EPAPI.Controllers
 {
     public class AuthController : Controller
     {
-        public EpicRest epicRest = new EpicRest();
+        public EpicRest epicRest = new();
         Mail mail = new Mail();
         User user = new User();
 
@@ -146,7 +146,13 @@ namespace EPAPI.Controllers
             }
             catch (Exception ex)
             {
-
+                dynamic result;
+                result = new
+                {
+                    code = 401,
+                    desc = ex.Message.ToString()
+                };
+                return result;
                 throw;
             }
             

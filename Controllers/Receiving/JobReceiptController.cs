@@ -146,8 +146,10 @@ namespace EPAPI.Controllers.Receiving
                         {
                             code = 201,
                             desc = "Ok",
-                            message = message
-                        };
+                            data = new {
+                                    message = message
+                                }
+                         };
                         return result;
                     }
                     else

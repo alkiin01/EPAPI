@@ -412,8 +412,8 @@
     public class GetLabor
     {
         public string LaborTypePseudo { get; set; }
-        public int LaborSeq { get; set; }
-        public int LaborSeqDtl { get; set; }
+        public int LaborHedSeq { get; set; }
+        public int LaborDtlSeq { get; set; }
         public string JobNum { get; set; }
         public string OpSeq {  get; set; }
         public DateTime date { get;set; }
@@ -428,6 +428,10 @@
         public string DiscrpRsnCode { get; set; }
         public string TimeStatus { get; set; }
         public string PartNum { get; set; }
+        public string FieldName {  get; set; }
+        public string TimeValue { get;set;}
+        public int Shift { get; set; }
+        public string ShiftDescription { get; set; }
 
 
         public string RowMod { get; set; }
