@@ -804,7 +804,6 @@ namespace EPAPI.Controllers.TimeEntry
                         {
                             code = 400,
                            status = bo.ResponseError.ToString(),
-                        
                         };
 
                         return result;
