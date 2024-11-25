@@ -4,6 +4,7 @@ using EPAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
 using EpicorRestAPI;
 using Newtonsoft.Json;
+using Microsoft.Build.Framework;
 
 namespace EPAPI.Controllers.Receiving
 {
@@ -34,7 +35,7 @@ namespace EPAPI.Controllers.Receiving
                         result = new
                         {
                             code = 400,
-                            desc = bojo.ResponseError.ToString()
+                            status = bojo.ResponseError.ToString()
                         };
                         return result;
                     }
@@ -57,7 +58,8 @@ namespace EPAPI.Controllers.Receiving
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                            status = bo.ResponseError.ToString(),
+                            data = new {}
                         };
                         return result;
                     }
@@ -66,16 +68,20 @@ namespace EPAPI.Controllers.Receiving
                         preview = bo.ResponseBody.ToString();
                     }
                     JobResponse newResponse = JsonConvert.DeserializeObject<JobResponse>(preview);
-                    listData = newResponse.parameters.ds.PartTran.ToList();
-
-                    return listData;
+                    result = new
+                    {
+                        code = 200,
+                        status = "OK",
+                        data = new { list = newResponse.parameters.ds.PartTran }
+                    };
+                    return result;
                 }
                 else
                 {
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                        status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -87,7 +93,7 @@ namespace EPAPI.Controllers.Receiving
                 result = new
                 {
                     code = 400,
-                    desc = ex.Message.ToString() + "on GetNew"
+                    status = ex.Message.ToString() 
                 };
                 return result;
             }
@@ -108,8 +114,12 @@ namespace EPAPI.Controllers.Receiving
                 bool test = epicRest.PortalBeearer(user);
                 if (test)
                 {
-                    listData = GetNew(job);
-                    listData2 = GetNew(job);
+                    var _getNew = GetNew(job);
+                    if (_getNew.code != 200) {
+                        return false;
+                    }
+                    listData = _getNew.data.list;
+                    listData2 = _getNew.data.list;
 
                     var dt = listData.Last();
                     var dt2 = listData2.Last();
@@ -129,7 +139,7 @@ namespace EPAPI.Controllers.Receiving
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                            status = bo.ResponseError.ToString()
                         };
                         return result;
                     }
@@ -145,7 +155,7 @@ namespace EPAPI.Controllers.Receiving
                         result = new
                         {
                             code = 201,
-                            desc = "Ok",
+                            status = "Ok",
                             data = new {
                                     message = message
                                 }
@@ -157,15 +167,14 @@ namespace EPAPI.Controllers.Receiving
                         listData2 = ChangeLotNum(listData, job);
                         var data = listData2.Last();
                         data.WareHouseCode = job.WarehouseCode;
-                        data.WarehouseDescription = job.WarehouseDescription;
 
                         listData2 = new List<PartTran> { data };
                         listData2 = ChangeWareHouse(listData2, job);
-                        listData2 = PreUpdate(listData2, job);
+                        bool updated = PreUpdate(listData2, job);
                         result = new
                         {
                             code = 200,
-                            desc = "Ok",
+                            status = "Ok",
                         };
                         return result;
                     }
@@ -176,7 +185,7 @@ namespace EPAPI.Controllers.Receiving
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                        status = "Not Authorized or Server Full"
                     };
                     return result;
 
@@ -185,7 +194,15 @@ namespace EPAPI.Controllers.Receiving
             catch (Exception ex)
             {
 
-                throw;
+                dynamic result;
+
+                result = new
+                {
+                    code = 400,
+                    status = ex.Message.ToString(),
+                    data = new { }
+                };
+                return result; ;
             }
         } 
         public dynamic ChangeLotNum(List<PartTran> tran, JobReceipt job)
@@ -220,7 +237,7 @@ namespace EPAPI.Controllers.Receiving
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                            status = bo.ResponseError.ToString()
                         };
                         return result;
                     }
@@ -239,7 +256,15 @@ namespace EPAPI.Controllers.Receiving
             {
 
 
-                throw;
+                dynamic result;
+
+                result = new
+                {
+                    code = 400,
+                    status = ex.Message.ToString(),
+                    data = new { }
+                };
+                return result;;
             }
         }
         public dynamic ChangeWareHouse(List<PartTran> tran, JobReceipt job)
@@ -272,7 +297,7 @@ namespace EPAPI.Controllers.Receiving
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                            status = bo.ResponseError.ToString()
                         };
                         return result;
                     }
@@ -291,12 +316,20 @@ namespace EPAPI.Controllers.Receiving
             {
 
 
-                throw;
+                dynamic result;
+
+                result = new
+                {
+                    code = 400,
+                    status = ex.Message.ToString(),
+                    data = new { }
+                };
+                return result;;
             }
 
         }
 
-        public dynamic PreUpdate(List<PartTran> tran, JobReceipt job)
+        public bool PreUpdate(List<PartTran> tran, JobReceipt job)
         {
             try
             {
@@ -326,9 +359,9 @@ namespace EPAPI.Controllers.Receiving
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                            status = bo.ResponseError.ToString()
                         };
-                        return result;
+                        return false;
                     }
                     else
                     {
@@ -337,18 +370,27 @@ namespace EPAPI.Controllers.Receiving
                         listData2 = newResponse.parameters.ds.PartTran.ToList();
                         listLegal = newResponse.parameters.ds.LegalNumGenOpts.ToList();
                         VerifySerialMatchAndPlanContract(listData2, listLegal, job);
-                        return listData2;
+                        return true;
                     }
                 }
-                        return listData2;
-
-
+                else
+                {
+                    return false;
+                }
             }
             catch (Exception ex)
             {
 
 
-                throw;
+                dynamic result;
+
+                result = new
+                {
+                    code = 400,
+                    status = ex.Message.ToString(),
+                    data = new { }
+                };
+                return result;;
             }
         }
         public dynamic VerifySerialMatchAndPlanContract(List<PartTran> tran, List<LegalNumGenOpts> legal ,JobReceipt job)
@@ -375,9 +417,9 @@ namespace EPAPI.Controllers.Receiving
                     {
                         ds = new
                         {
-                            LegalNumGenOpts = new[] {legalopt},
+                            LegalNumGenOpts = new[] { legalopt },
                             PartTran = new[] { list, partran }
-                        },
+                        }
                     };
                     string preview = "";
                     var bo = EpicorRest.BoPost("Erp.BO.ReceiptsFromMfgSvc", "VerifySerialMatchAndPlanContract", pData);
@@ -386,7 +428,7 @@ namespace EPAPI.Controllers.Receiving
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                            status = bo.ResponseError.ToString()
                         };
                         return result;
                     }
@@ -407,7 +449,15 @@ namespace EPAPI.Controllers.Receiving
             {
 
 
-                throw;
+                dynamic result;
+
+                result = new
+                {
+                    code = 400,
+                    status = ex.Message.ToString(),
+                    data = new { }
+                };
+                return result;;
             }
         }
 
@@ -447,7 +497,7 @@ namespace EPAPI.Controllers.Receiving
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                            status = bo.ResponseError.ToString()
                         };
                         return result;
                     }
@@ -465,29 +515,119 @@ namespace EPAPI.Controllers.Receiving
             }
             catch (Exception ex)
             {
-                throw;
+                dynamic result;
+
+                result = new
+                {
+                    code = 400,
+                    status = ex.Message.ToString(),
+                    data = new { }
+                };
+                return result;;
             }
         }
-        [Route("JobRec/BypassUpdate")]
-        [HttpPost]
-        public dynamic BypassUpdate ([FromBody] JobReceipt job)
+
+        public dynamic ChangePart(List<PartTran> tran, JobReceipt job)
         {
             try
             {
                 user.nik = job.nik;
                 user.password = job.password;
                 dynamic result;
+                List<PartTran> listData = tran;
+                List<PartTran> listData2 = new List<PartTran>();
+                bool test = epicRest.PortalBeearer(user);
+                if (test)
+                {
+                    var list = listData.FirstOrDefault();
+                    var partran = tran.FirstOrDefault();
+                    partran.RowMod = "U";
+                    var pData = new
+                    {
+                        ProposedPartNum = job.PartNum,
+                        ds = new
+                        {
+                            PartTran = new[] { list, partran }  
+                        },
+                        ipContinue = true,
+                    };
+                    string preview = "";
+                    var bo = EpicorRest.BoPost("Erp.BO.ReceiptsFromMfgSvc", "OnChangePartNum", pData);
+                    if (bo.ResponseStatus != System.Net.HttpStatusCode.OK)
+                    {
+                        result = new
+                        {
+                            code = 400,
+                            status = bo.ResponseError.ToString()
+                        };
+                        return result;
+                    }
+                    else
+                    {
+                        preview = bo.ResponseBody.ToString();
+                        JobResponse newResponse = JsonConvert.DeserializeObject<JobResponse>(preview);
+                        listData2 = newResponse.parameters.ds.PartTran.ToList();
+                        return listData2;
+                    }
+                }
+                return listData2;
+
+            }
+            catch (Exception ex)
+            {
+
+
+                dynamic result;
+
+                result = new
+                {
+                    code = 400,
+                    status = ex.Message.ToString(),
+                    data = new { }
+                };
+                return result;;
+            }
+
+        }
+
+        [Route("JobRec/BypassUpdate")]
+        [HttpPost]
+        public dynamic BypassUpdate([FromBody] JobReceipt job)
+        {
+            try
+            {
+                user.nik = job.nik;
+                user.password = job.password;
+                dynamic result;
+                dynamic newjob;
+                dynamic newjob2;
+
                 List<PartTran> listData = new List<PartTran>();
                 List<PartTran> listData2 = new List<PartTran>();
                 bool test = epicRest.PortalBeearer(user);
                 if (test)
                 {
-                    listData = GetNew(job);
-                    listData2 = GetNew(job);
-
-                    var dt = listData.Last();
-                    var dt2 = listData2.Last();
+                    newjob = GetNew(job);
+                    newjob2 = GetNew(job);
+                    if (newjob.code != 200) {
+                        result = new
+                        {
+                            code = 500,
+                            status = newjob.status.ToString()
+                        };
+                        return result;
+                    }
+                    listData = newjob.data.list;
+                    listData2 = newjob.data.list;
+                    var _listpart = listData.Count(x => x.PartNum == job.PartNum );
+                    if (_listpart == 0) {
+                        listData = ChangePart(listData, job);
+                        listData2 = ChangePart(listData, job);
+                    }
+                    var dt = listData.FirstOrDefault(x => x.PartNum == job.PartNum);
+                    var dt2 = listData2.FirstOrDefault(x => x.PartNum == job.PartNum);
                     dt2.ActTranQty = job.Qty;
+                    dt2.TranQty = job.Qty;
                     dt2.RowMod = "U";
                     var pData = new
                     {
@@ -496,6 +636,7 @@ namespace EPAPI.Controllers.Receiving
                             PartTran = new[] { dt,dt2 }
                         },
                     };
+
                     string preview = "";
                     var bo = EpicorRest.BoPost("Erp.BO.ReceiptsFromMfgSvc", "OnChangeActTranQty", pData);
                     if (bo.ResponseStatus != System.Net.HttpStatusCode.OK)
@@ -503,7 +644,7 @@ namespace EPAPI.Controllers.Receiving
                         result = new
                         {
                             code = 400,
-                            desc = bo.ResponseError.ToString()
+                            status = bo.ResponseError.ToString()
                         };
                         return result;
                     }
@@ -518,24 +659,47 @@ namespace EPAPI.Controllers.Receiving
                         listData2 = ChangeLotNum(listData, job);
                         var data = listData2.Last();
                         data.WareHouseCode = job.WarehouseCode;
-                        data.WarehouseDescription = job.WarehouseDescription;
 
                         listData2 = new List<PartTran> { data };
                         listData2 = ChangeWareHouse(listData2, job);
-                        listData2 = PreUpdate(listData2, job);
+                        bool bisa = PreUpdate(listData2, job);
+                        var returnData = listData2.FirstOrDefault();
+                    if (!bisa) {
+                        result = new
+                        {
+                            code = 400,
+                            status = "Gagal Update Qty",
+                            data = new
+                            {
+                                BinFrom = returnData.BinNum2,
+                                WarehouseFrom = returnData.WareHouse2
+                            }
+                        };
+                        return result;
+                    }
+                    else
+                    {
                         result = new
                         {
                             code = 200,
-                            desc = "Ok",
+                            status = "Ok",
+                            data = new
+                            {
+                                PartNum = returnData.PartNum,
+                                BinFrom = returnData.BinNum2,
+                                WarehouseFrom = returnData.WareHouse2
+                            }
                         };
                         return result;
+                    }
+                        
                 }
                 else
                 {
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                        status = "Not Authorized or Server Full"
                     };
                     return result;
 
@@ -543,8 +707,15 @@ namespace EPAPI.Controllers.Receiving
             }
             catch (Exception ex)
             {
+                dynamic result;
 
-                throw;
+                result = new
+                {
+                    code = 400,
+                    status = ex.Message.ToString(),
+                    data = new { }
+                };
+                return result;
             }
         }
     }

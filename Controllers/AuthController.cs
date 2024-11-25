@@ -39,7 +39,7 @@ namespace EPAPI.Controllers
                         result = new
                         {
                             code = 9999,
-                            desc = boGet.ResponseError.ToString()
+                            status = boGet.ResponseError.ToString()
                         };
                         return result;
                     }
@@ -55,7 +55,7 @@ namespace EPAPI.Controllers
                         result = new
                         {
                             code=200,
-                            desc="ok",
+                            status="ok",
                             name= res.Name,
                             email = res.EMailAddress,
                             SecurityMgr = res.SecurityMgr,
@@ -68,7 +68,7 @@ namespace EPAPI.Controllers
                     result = new
                     {
                         code = 401,
-                        desc = "Worng username or password",
+                        status = "Worng username or password",
                     };
                     return result;
                 }
@@ -80,13 +80,14 @@ namespace EPAPI.Controllers
                 {
                     code = 401,
                     msg = ex.Message.ToString(),
-                    desc = "Worng username or password"
+                    status = "Worng username or password"
                 };
                 return result;
             }
         }
 
         [Route("SendEmail")]
+        [HttpPost]
         public dynamic SendEmail([FromBody] Mail mail)
         {
             try
@@ -118,7 +119,7 @@ namespace EPAPI.Controllers
                         result = new
                         {
                             code = 400,
-                            desc = rsp.ResponseError.ToString()+" From BO"
+                            status = rsp.ResponseError.ToString()+" From BO"
                         };
                         return result;
                     }
@@ -129,7 +130,11 @@ namespace EPAPI.Controllers
                         result = new
                         {
                             code = 200,
-                            desc = "Email Sends to :"+ reslt
+                            status = "ok",
+                            data = new
+                            {
+
+                            }
                         };
                         return result;
                     }
@@ -139,7 +144,7 @@ namespace EPAPI.Controllers
                     result = new
                     {
                         code = 401,
-                        desc = "Not Authorized or Server Full"
+                        status = "Not Authorized or Server Full"
                     };
                     return result;
                 }
@@ -150,7 +155,7 @@ namespace EPAPI.Controllers
                 result = new
                 {
                     code = 401,
-                    desc = ex.Message.ToString()
+                    status = ex.Message.ToString()
                 };
                 return result;
                 throw;

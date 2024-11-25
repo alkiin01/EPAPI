@@ -425,18 +425,27 @@
         public int LaborQty { get; set; }
         public int ScrapQty { get; set; }
         public int DiscrepQty { get; set; }
-        public string DiscrpRsnCode { get; set; }
+        public string? DiscrpRsnCode { get; set; }
+        public string? ScrapReasonCode { get; set; }
         public string TimeStatus { get; set; }
         public string PartNum { get; set; }
         public string FieldName {  get; set; }
         public string TimeValue { get;set;}
         public int Shift { get; set; }
-        public string ShiftDescription { get; set; }
-
+        public string? ShiftDescription { get; set; }
+        public string? ResourceGrpID { get; set; }
+        public string? Department { get; set; }
+        public string? OpCode { get; set; }
+        public string? ResourceID { get; set; }
+        public string? ResourceGrpDescription { get; set; }
+        public string? IndirectCode { get; set; }
 
         public string RowMod { get; set; }
         public string nik { get; set; }
         public string password { get; set; }
+        public int? OprSeq { get; set; }
+        public string? ExpenseCode { get;  set; }
+        public string? LaborNote { get;  set; }
     }
 
     public class TimeDtlEntries
@@ -456,7 +465,46 @@
         public string nik { get; set; }
         public string password { get; set; }
 
-
+    }
+    public class LaborPart
+    {
+        public string? AttrClassID { get; set; }
+        public int BitFlag { get; set; }
+        public string? Company { get; set; }
+        public string? DiscrepAttributeSetDescription { get; set; }
+        public string? DiscrepAttributeSetShortDescription { get; set; }
+        public int DiscrepQty { get; set; }
+        public string? DiscrepRevision { get; set; }
+        public string? DiscrepUOM { get; set; }
+        public int DiscrpAttributeSetID { get; set; }
+        public string? DiscrpRsnCode { get; set; }
+        public string? DiscrpRsnDescription { get; set; }
+        public bool EnableDiscrpQty { get; set; }
+        public bool EnableScrapQty { get; set; }
+        public string? LaborAttributeSetDescription { get; set; }
+        public int LaborAttributeSetID { get; set; }
+        public string? LaborAttributeSetShortDescription { get; set; }
+        public int LaborDtlSeq { get; set; }
+        public int LaborHedSeq { get; set; }
+        public bool MESProcessing { get; set; }
+        public int NonConfTranID { get; set; }
+        public string? PartDescription { get; set; }
+        public string? PartNum { get; set; }
+        public int PartQty { get; set; }
+        public string? PartUOM { get; set; }
+        public bool RequestMove { get; set; }
+        public string? RevisionNum { get; set; }
+        public string? RowMod { get; set; }
+        public string? ScrapAttributeSetDescription { get; set; }
+        public int ScrapAttributeSetID { get; set; }
+        public string? ScrapAttributeSetShortDescription { get; set; }
+        public int ScrapQty { get; set; }
+        public string? ScrapReasonCode { get; set; }
+        public string? ScrapReasonDescription { get; set; }
+        public string? ScrapRevision { get; set; }
+        public string? ScrapUOM { get; set; }
+        public int SysRevID { get; set; }
+        public Guid SysRowID { get; set; }
     }
 }
 

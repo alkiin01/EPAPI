@@ -11,6 +11,7 @@ using System.Linq;
 
 namespace EPAPI.Controllers.TimeEntry
 {
+
     public class TimeEntryController : Controller
     {
         public EpicRest epicRest = new();
@@ -439,7 +440,7 @@ namespace EPAPI.Controllers.TimeEntry
                     result = new
                     {
                         code = 200,
-                       status = "Ok",
+                        status = "Ok",
                         data = new
                         { 
                                 LaborHedSeq = SqNum.LaborHedSeq
@@ -524,30 +525,81 @@ namespace EPAPI.Controllers.TimeEntry
                         {
                             listData = DefaultJobNum(listData, entries.JobNum, "");
                             listData = LaborDtlOprSeq(listData, entries.OpSeq, "");
+
                             listing = DirectUpdateDtl(listData, "");
                         }
                         else
                         {
+                            listData.Last().LaborTypePseudo = entries.LaborTypePseudo;
+                            listData.Last().JobNum = entries.JobNum;
+                            listData.Last().OprSeq = entries.OprSeq;
+                            listData.Last().IndirectCode = entries.IndirectCode;
+                            listData.Last().ResourceGrpID = entries.ResourceGrpID;
+                            listData.Last().ResourceID = entries.ResourceID;
+                            listData.Last().ExpenseCode = "DEFAULT";
+
                             listing = DirectUpdateDtl(listData, "");
                         }
                     }
                     if(listing != null)
                     {
-                        var detectCopart = listing.Last();
-                        if(detectCopart.EnableLaborQty == false)
+                        var dataListing = listing.Last();
+                        if(dataListing.EnableLaborQty == false)
                         {
                             result = new
                             {
                                 code = 200,
                                 status = "Ok",
                                 data = new{
-                                LaborHeadSeq = detectCopart.LaborHedSeq,
-                                LaborDtlSeq = detectCopart.LaborDtlSeq,
+                                LaborHeadSeq = dataListing.LaborHedSeq,
+                                LaborDtlSeq = dataListing.LaborDtlSeq,
                                 IsCopart = true
                                 }
                             };
                             return result;
                         }
+                        #region JobNum Kosong
+                        //else if (dataListing.JobNum == "")
+                        //{
+                        //    var laborHeadSeq = dataListing.LaborHedSeq;
+                        //    var LaborSeqDtl = dataListing.LaborDtlSeq;
+                        //    string method = "LaborDtls('SAI'," + laborHeadSeq + "," + LaborSeqDtl + ")";
+                        //    var patchData = new
+                        //    {
+                        //        Company = "SAI",
+                        //        JobNum = entries.JobNum,
+                        //        OprSeq = entries.OprSeq
+                        //    };
+                        //    var boGet = EpicorRest.BoPatch("Erp.BO.LaborSvc", method, patchData);
+                        //    if (boGet.ResponseStatus != System.Net.HttpStatusCode.OK)
+                        //    {
+                        //        result = new
+                        //        {
+                        //            code = 400,
+                        //            status = bo.ResponseError.ToString(),
+
+                        //        };
+
+                        //        return result;
+                        //    }
+                        //    else
+                        //    {
+
+                        //        result = new
+                        //        {
+                        //            code = 200,
+                        //            status = "Ok",
+                        //            data = new
+                        //            {
+                        //                LaborHeadSeq = dataListing.LaborHedSeq,
+                        //                LaborDtlSeq = dataListing.LaborDtlSeq,
+                        //                IsCopart = false
+                        //            }
+                        //        };
+                        //        return result;
+                        //    }
+                        //}
+                        #endregion
                         else
                         {
                             result = new
@@ -556,13 +608,14 @@ namespace EPAPI.Controllers.TimeEntry
                                 status = "Ok",
                                 data = new
                                 {
-                                    LaborHeadSeq = detectCopart.LaborHedSeq,
-                                    LaborDtlSeq = detectCopart.LaborDtlSeq,
+                                    LaborHeadSeq = dataListing.LaborHedSeq,
+                                    LaborDtlSeq = dataListing.LaborDtlSeq,
                                     IsCopart = false
                                 }
                             };
                             return result;
                         }
+                       
                     }
                     else
                     {
@@ -775,6 +828,66 @@ namespace EPAPI.Controllers.TimeEntry
                 return result;
             }
         }
+        public dynamic ChangeResourceGrpID(List<LaborDtl> labor, string RowMod,string OpCode,string ResGrp)
+        {
+            try
+            {
+                dynamic result;
+                List<LaborDtl> listData = new List<LaborDtl>();
+                List<LaborDtl> listData2 = new List<LaborDtl>();
+                bool test = epicRest.PortalBeearer(user);
+                RowMod = RowMod == "" ? "A" : RowMod;
+                if (test)
+                {
+                    var lab = labor.FirstOrDefault();
+                    lab.RowMod = RowMod;
+                    var pData = new
+                    {
+                        ds = new
+                        {
+                            LaborDtl = new[] { lab }
+                            
+                        },
+                        inOpCode = OpCode,
+                        inResGrpID = ResGrp
+                    };
+                    string preview = "";
+                    var bo = EpicorRest.BoPost("Erp.BO.LaborSvc", "Overrides", pData);
+                    if (bo.ResponseStatus != System.Net.HttpStatusCode.OK)
+                    {
+                        result = new
+                        {
+                            code = 400,
+                            status = bo.ResponseError.ToString(),
+
+                        };
+
+                        return result;
+                    }
+                    else
+                    {
+                        preview = bo.ResponseBody.ToString();
+                        LaborResponse newResponse = JsonConvert.DeserializeObject<LaborResponse>(preview);
+                        listData = newResponse.parameters.ds.LaborDtl.ToList();
+                        var laborDtl = listData.Last();
+                        LaborRateCalc(listData, "");
+                        return listData;
+                    }
+                }
+                return listData;
+            }
+            catch (Exception ex)
+            {
+
+                dynamic result;
+                result = new
+                {
+                    code = 400,
+                    status = ex.Message.ToString() + "LaborDtlOprSeq"
+                };
+                return result;
+            }
+        }
         public dynamic DirectUpdateDtl(List<LaborDtl> ds, string RowMod)
         {
             try
@@ -836,6 +949,71 @@ namespace EPAPI.Controllers.TimeEntry
                 {
                     code = 400,
                    status = ex.Message.ToString() + " DirectUpdate"
+                };
+                return result;
+            }
+        }
+        public dynamic TimeComplete(List<LaborDtl> ds, string RowMod)
+        {
+            try
+            {
+                List<LaborDtl> listData = new List<LaborDtl>();
+
+                dynamic result;
+                bool test = epicRest.PortalBeearer(user);
+                RowMod = RowMod == "" ? "A" : RowMod;
+                if (test)
+                {
+                    var param = ds.Last();
+                    param.RowMod = RowMod;
+                    var pData = new
+                    {
+                        cmplete = true,
+                        ds = new
+                        {
+                            LaborDtl = new[] { param }
+                        },
+                    };
+                    string preview = "";
+                    var bo = EpicorRest.BoPost("Erp.BO.LaborSvc", "DefaultComplete", pData);
+                    if (bo.ResponseStatus != System.Net.HttpStatusCode.OK)
+                    {
+                        result = new
+                        {
+                            code = 400,
+                            status = bo.ResponseError.ToString(),
+                        };
+
+                        return result;
+                    }
+                    else
+                    {
+                        preview = bo.ResponseBody.ToString();
+                        LaborResponse newResponse = JsonConvert.DeserializeObject<LaborResponse>(preview);
+                        listData = newResponse.parameters.ds.LaborDtl.ToList();
+
+                        return listData;
+                    }
+
+                }
+                else
+                {
+                    result = new
+                    {
+                        code = 401,
+                        status = "Not Authorized or Server Full"
+                    };
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                dynamic result;
+                result = new
+                {
+                    code = 400,
+                    status = ex.Message.ToString() + " DirectUpdate"
                 };
                 return result;
             }
@@ -1331,6 +1509,10 @@ namespace EPAPI.Controllers.TimeEntry
                 if (test)
                 {
                     listData = GetDetailID(HeadNum, DtlNum);
+                    
+                    var param2 = listData.FirstOrDefault();
+                    listData = ChangeResourceGrpID(listData, RowMod,param2.OpCode,entries.ResourceGrpID);
+
                     var param = listData.FirstOrDefault();
                     param.ClockInDate = entries.ClockInDate;
                     param.ClockinTime = ConvertTimeToDecimal(entries.ClockinTime);
@@ -1338,16 +1520,26 @@ namespace EPAPI.Controllers.TimeEntry
                     param.LaborHrs = entries.LaborHrs;
                     param.BurdenHrs = entries.BurdenHrs;
                     param.LaborQty = entries.LaborQty;
+
                     param.ScrapQty = entries.ScrapQty;
+                    param.ScrapReasonCode = entries.ScrapQty > 0 ? entries.ScrapReasonCode : "";
+
                     param.DiscrepQty = entries.DiscrepQty;
-                    param.DiscrpRsnCode = entries.DiscrpRsnCode;
+                    param.DiscrpRsnCode = entries.DiscrepQty > 0 ? entries.DiscrpRsnCode : "";
+
+                    param.ResourceGrpID = (param.ResourceGrpID == entries.ResourceGrpID ? entries.ResourceGrpID : entries.ResourceGrpID);
+                    param.ResourceID = (param.ResourceID == entries.ResourceID ? entries.ResourceID : entries.ResourceID);
+                    param.ResourceGrpDescription = entries.ResourceGrpDescription;
+                    param.IndirectCode = entries.IndirectCode;
+                    param.LaborNote = entries.LaborNote;
+
                     param.RowMod = RowMod;
                     var pData = new
                     {
                         ds = new
                         {
                             LaborDtl = new[] { param }
-                        },
+                        }
                     };
                     string preview = "";
                     CheckWarnings(listData, RowMod);
@@ -1424,7 +1616,9 @@ namespace EPAPI.Controllers.TimeEntry
                 if (test)
                 {
                     listData = GetDetailID(HeadNum, DtlNum);
-                    
+                    listData = TimeComplete(listData,"U");
+                    listData = DirectUpdateDtl(listData, "U");
+
                     listData2 = ValidateChargeRateForTimeType(listData);
                     listData = ValidateChargeRateForTimeType(listData);
 
@@ -1662,6 +1856,7 @@ namespace EPAPI.Controllers.TimeEntry
                 dynamic result;
                 List<LaborHed> listHead = new List<LaborHed>();
                 List<LaborDtl> listData = new List<LaborDtl>();
+                List<LaborPart> listPart = new List<LaborPart>();
                 LaborDtl data = new LaborDtl();
                 user.nik = entries.nik;
                 user.password = entries.password;
@@ -1673,6 +1868,9 @@ namespace EPAPI.Controllers.TimeEntry
                     var PartNum = entries.PartNum;
                     var Qty = entries.LaborQty;
                     var DiscrepQty = entries.DiscrepQty;
+                    var ScrapQty = entries.ScrapQty;
+                    var DiscrpRsnCode = entries.DiscrpRsnCode;
+                    var ScrapReasonCode = entries.ScrapReasonCode;
 
 
                     string rtn = "";
@@ -1681,7 +1879,10 @@ namespace EPAPI.Controllers.TimeEntry
                     {
                         Company = "SAI",
                         PartQty = Qty,
-
+                        ScrapQty = ScrapQty,
+                        DiscrepQty = DiscrepQty,
+                        DiscrpRsnCode = DiscrepQty > 0 ? DiscrpRsnCode : "",
+                        ScrapReasonCode = ScrapQty > 0 ? ScrapReasonCode : ""
                     };
                     var boGet = EpicorRest.BoPatch("Erp.BO.LaborSvc", method,patchData);
                     if (boGet.IsErrorResponse)
@@ -1690,9 +1891,7 @@ namespace EPAPI.Controllers.TimeEntry
                         {
                             code = 400,
                            status = boGet.ResponseError.ToString(),
-                        
                         };
-
                         return result;
                     }
                     else
@@ -1702,11 +1901,29 @@ namespace EPAPI.Controllers.TimeEntry
                         {
                             LaborDtl = new[] { rtn }
                         };
+                        string method2 = "LaborDtls('SAI'," + laborHeadSeq + "," + LaborSeqDtl+")";
+                        var patchData2 = new
+                        {
+                            Company = "SAI",
+                            LaborQty = Qty,
+                        };
+                        var boPatch = EpicorRest.BoPatch("Erp.BO.LaborSvc", method2, patchData2);
+                        if (boPatch.IsErrorResponse)
+                        {
+                            result = new
+                            {
+                                code = 400,
+                                status = boGet.ResponseError.ToString(),
+                            };
+                            return result;
+                        }
                         //rtn = ds.ToString();
                         //JObject jsonObject = JObject.Parse(rtn);
                         //JArray jsonArray = (JArray)jsonObject["LaborDtl"];
                         data = JsonConvert.DeserializeObject<LaborDtl>(rtn);
                         listData = new List<LaborDtl> { data };
+
+
                         result = new
                         {
                             code = 200,
@@ -2006,5 +2223,4 @@ namespace EPAPI.Controllers.TimeEntry
             return timeInDecimal;
         }
     }
-}
-// SUDAH END KAH MANIS ?
+}// SUDAH END KAH MANIS ?

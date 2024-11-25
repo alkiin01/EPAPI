@@ -25,7 +25,7 @@ namespace EPAPI.Controllers
 
         [Route("Shipment/GetNew")]
         [HttpPost]
-        public dynamic GetNew([FromBody] UserEpicor users)
+        public dynamic GetNew([FromBody] User users)
         {
           user.nik = users.nik;
             user.password = users.password;
@@ -182,7 +182,7 @@ namespace EPAPI.Controllers
                 dynamic result = new
                 {
                     code = 1000,
-                    desc = "Not Authorized"
+                    desc = ex.Message.ToString()
                 };
                 return result;
             }
@@ -649,7 +649,6 @@ namespace EPAPI.Controllers
                         ShipDtl = new[] { newSetShipDtl }
                     }
                 };
-                string previews = "";
                 var boPosts = EpicorRest.BoPost("Erp.BO.CustShipSvc", "UpdateMaster", newShip);
                 if (boPosts.ResponseStatus != System.Net.HttpStatusCode.OK)
                 {
@@ -873,7 +872,6 @@ namespace EPAPI.Controllers
                     ShipDtl = new[] { SetShipDtl2, newSetShipDtl }
                 }
             };
-            string previews = "";
             var boPosts = EpicorRest.BoPost("Erp.BO.CustShipSvc", "UpdateMaster", newShip);
             if (boPosts.ResponseStatus != System.Net.HttpStatusCode.OK)
             {

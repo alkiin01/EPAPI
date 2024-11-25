@@ -326,7 +326,7 @@
        public int? Qty { get; set; }
         public string? LotNum { get; set; }
         public string? WarehouseCode { get; set; }
-        public string? WarehouseDescription { get; set; }
+        public string? PartNum { get; set; } 
         public string? BinNum { get; set; }
         public string? nik { get; set; }
         public string? password { get; set; }
